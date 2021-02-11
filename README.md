@@ -1,7 +1,7 @@
 ### Build with docker (recommended)
 
 ```
-./build.sh
+docker build --tag z3-test  --file Dockerfile .
 ```
 
 ### Test
