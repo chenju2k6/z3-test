@@ -17,7 +17,6 @@
 #include <atomic>
 #include <boost/asio.hpp>
 #include <boost/thread/thread_pool.hpp>
-#include <gperftools/profiler.h>
 
 #include <google/protobuf/io/zero_copy_stream_impl.h>
 
