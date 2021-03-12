@@ -39,3 +39,16 @@ target_link_libraries(z3test
   pthread
 	boost_system
 	boost_filesystem)
+
+add_executable(z3ntest
+  z3ntest.cc
+  util.cc
+  z3solver.cc
+  ${rgd_proto_srcs}
+)
+target_link_libraries(z3ntest
+  z3
+  protobuf
+  pthread
+	boost_system
+	boost_filesystem)
