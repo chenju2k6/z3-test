@@ -4,7 +4,7 @@ project(rgd C CXX)
 
 ## set up test
 set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O3 -std=c++14 -fPIC")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O3 -std=c++14 -fPIC -L/usr/local/lib")
 
 
 # Proto file

@@ -30,8 +30,8 @@ public:
   uint8_t getInput(uint32_t index);
 
 
-protected:
   z3::context          context_;
+protected:
   z3::solver            solver_;
   uint64_t              start_time_;
   uint64_t              solving_time_;

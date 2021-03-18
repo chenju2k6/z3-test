@@ -46,6 +46,8 @@ using namespace boost::filesystem;
 bool sendZ3Solver(bool opti, Z3Solver &g_solver, std::shared_ptr<JitCmdv2> cmd,
     std::unordered_map<uint32_t,uint8_t> &solu, uint64_t *st);
 
+bool sendZ3Solver1(bool opti, Z3Solver &g_solver, std::shared_ptr<JitCmdv2> cmd,
+    std::unordered_map<uint32_t,uint8_t> &solu);
 bool readDelimitedFrom(
     google::protobuf::io::ZeroCopyInputStream* rawInput,
     google::protobuf::MessageLite* message) {
@@ -76,6 +78,14 @@ bool readDelimitedFrom(
 
 
 Z3Solver g_solver;
+
+
+bool z3Evaluate(std::shared_ptr<JitCmdv2> cmd) {
+  bool suc = false;
+  std::unordered_map<uint32_t,uint8_t> solu;
+  suc = sendZ3Solver1(false,g_solver,cmd, solu);
+  return suc;
+}
 
 
 bool z3Task(std::shared_ptr<JitCmdv2> cmd) {

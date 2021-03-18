@@ -496,13 +496,60 @@ bool checkSat(Z3Solver &g_solver, std::shared_ptr<JitCmdv2> cmd) {
 	return g_solver.checkonly();
 }
 
+bool sendZ3Solver1(bool opti, Z3Solver &g_solver, std::shared_ptr<JitCmdv2> cmd,
+    std::unordered_map<uint32_t,uint8_t> &solu) {
+  g_solver.reset();
+  std::unordered_map<uint32_t,z3::expr> expr_cache;
+  const JitRequest *req = &cmd->expr(0);
+  try {
+    z3::expr z3expr = g_solver.serialize(req,expr_cache);
+    z3::model model(g_solver.context_);
+    z3::symbol name1 = g_solver.context_.int_symbol(44);
+    z3::symbol name2 = g_solver.context_.int_symbol(45);
+    z3::symbol name3 = g_solver.context_.int_symbol(48);
+    z3::symbol name4 = g_solver.context_.int_symbol(49);
+    z3::sort sort = g_solver.context_.bv_sort(8);
+
+    z3::expr v3 = g_solver.context_.bv_val("100", 8);
+    z3::expr v4 = g_solver.context_.bv_val("101", 8);
+    z3::expr v5 = g_solver.context_.bv_val("102", 8);
+    z3::expr v6 = g_solver.context_.bv_val("103", 8);
+
+    z3::expr v7 = g_solver.context_.constant(name1, sort);
+    z3::expr v8 = g_solver.context_.constant(name2, sort);
+    z3::expr v9 = g_solver.context_.constant(name3, sort);
+    z3::expr v10 = g_solver.context_.constant(name4, sort);
+    z3::expr_vector origin(g_solver.context_);
+    z3::expr_vector replace(g_solver.context_);
+
+    origin.push_back(v7);
+    origin.push_back(v8);
+    origin.push_back(v9);
+    origin.push_back(v10);
+    replace.push_back(v3);
+    replace.push_back(v4);
+    replace.push_back(v5);
+    replace.push_back(v6);
+
+      z3::expr newone = z3expr.substitute(origin,replace);
+    for(int i=0; i<1000000;i++) {
+      z3::expr result = model.eval(newone);
+      // std::cout << "result is " << result.get_numeral_int() << std::endl;
+    }
+    g_solver.add(z3expr);
+  } catch (z3::exception e) {
+    std::cout << "z3 alert: " << e.msg() << std::endl;
+    return false;
+  }
+  bool suc =  g_solver.check(solu);
+  return suc;
+}
 
 bool sendZ3Solver(bool opti, Z3Solver &g_solver, std::shared_ptr<JitCmdv2> cmd,
 									std::unordered_map<uint32_t,uint8_t> &solu, uint64_t *st) {
 	//deprecating reset and solve
 	assert(cmd->cmd()==2);
 	g_solver.reset();
-	//printExpression(&cmd->expr(0));
 	static int count = 0;
 	int num_expr = 0;
 	if (opti)
